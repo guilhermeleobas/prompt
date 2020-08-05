@@ -1,6 +1,6 @@
 # prompt
 
-A fast, simple [bash][bash] prompt.
+A fork of skeswa/prompt with conda env info
 
 ![prompt screenshot][screenshot]
 
