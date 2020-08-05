@@ -23,6 +23,13 @@ if ! [[ -z $PROMPT_GIT_COLOR ]]; then
   __prompt_git_color="${__prompt_color_prefix}${PROMPT_GIT_COLOR}${__prompt_color_suffix}"
 fi
 
+# Set the conda color. Defaults to purple. It can be overwritten by
+# `PROMPT_CONDA_COLOR`.
+__prompt_conda_color="${__prompt_color_prefix}${__prompt_256_prefix}105${__prompt_color_suffix}"
+if ! [[ -z $PROMPT_CONDA_COLOR ]]; then
+  __prompt_git_color="${__prompt_color_prefix}${PROMPT_CONDA_COLOR}${__prompt_color_suffix}"
+fi
+
 # Set the user-host color. Defaults to blue. It can be overwritten by
 # `PROMPT_USERHOST_COLOR`.
 __prompt_userhost_color="${__prompt_color_prefix}${__prompt_256_prefix}39${__prompt_color_suffix}"
@@ -116,6 +123,17 @@ function __prompt_get_git_stuff() {
   fi
 }
 
+function __prompt_get_conda_env() {
+  local env
+  # Add conda environment to prompt
+  if [ "$CONDA_DEFAULT_ENV" != "base" ]
+  then
+    __prompt_retval="($CONDA_DEFAULT_ENV)"
+  else
+    __prompt_retval=''
+  fi
+}
+
 # This function creates prompt.
 function __prompt_command() {
   # Make the dollar red if the last command exited with error.
@@ -132,10 +150,12 @@ function __prompt_command() {
   local host="${__prompt_userhost_color}${__prompt_retval}"
   __prompt_get_git_stuff
   local git_stuff="${__prompt_git_color}${__prompt_retval}"
+  __prompt_get_conda_env
+  local conda_env="${__prompt_conda_color}${__prompt_retval}"
   local dollar="${dollar_color}$"
 
   # Set the PS1 to the new prompt.
-  PS1="${short_pwd}${git_stuff} ${host} ${dollar}${__prompt_no_color} "
+  PS1="${short_pwd}${git_stuff} ${conda_env} ${host} ${dollar}${__prompt_no_color} "  
 }
 
 # Tell bash about the function above.
