@@ -126,9 +126,9 @@ function __prompt_get_git_stuff() {
 function __prompt_get_conda_env() {
   local env
   # Add conda environment to prompt
-  if [ "$CONDA_DEFAULT_ENV" != "base" ]
+  if [ "$(basename $CONDA_DEFAULT_ENV)" != "base" ]
   then
-    __prompt_retval="($CONDA_DEFAULT_ENV)"
+    __prompt_retval="($(basename $CONDA_DEFAULT_ENV))"
   else
     __prompt_retval=''
   fi
